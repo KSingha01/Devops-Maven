@@ -15,7 +15,72 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.example.App</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
 </project>
+
+//Maven
+mvn archetype:generate -DgroupId=com.example -DartifactId=maven-example -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+mvn exec:java -Dexec.mainClass="com.example.App"
+
+//Gradle
+Groovy
+gradle init --type java-application
+cd app
+rename App.java as AdditionOperation.java
+paste below code in it
+
+package org.example;
+public class AdditionOperation {
+public static void main(String[] args) {
+double num1 = 5;
+double num2 = 10;
+double sum = num1 + num2;
+System.out.printf("The sum of %.2f and %.2f is %.2f%n", num1, num2, sum);
+}
+}
+
+
+then rename AppTest.java as AdditionOperationTest.java and paste below code 
+
+package org.example;
+import org.junit.Test;
+import static org.junit.Assert.*;
+public class AdditionOperationTest {
+@Test
+public void testAddition() {
+double num1 = 5;
+double num2 = 10;
+double expectedSum = num1 + num2;
+double actualSum = num1 + num2;
+assertEquals(expectedSum, actualSum, 0.01);
+}
+}
+
+gradle build
+gradle run
+
+
+
+
+
 
 cmd:"C:\Program Files\Java\jdk-21\bin\java.exe" -jar jenkins.war --httpPort=9090
 ter:& "C:\Program Files\Java\jdk-21\bin\java.exe" -jar jenkins.war --httpPort=9090
@@ -24,4 +89,61 @@ ter:& "C:\Program Files\Java\jdk-21\bin\java.exe" -jar jenkins.war --httpPort=90
 cd C:\Users\91891\.jenkins\workspace\Maven_Build_1
 mvn clean install
 java -jar target\maven-example-1.0-SNAPSHOT.jar
+
+
+
+ansible
+open ubuntu
+mkdir prog
+cd prog
+
+sudo apt update
+sudo apt upgrade -y
+
+sudo apt install software-properties-common -y
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible -y
+ansible --version
+nano inventory.ini
+inside:[local]
+localhost ansible_connection=local
+
+nano HelloWorld.java
+inside write this code:
+public class HelloWorld{
+      public static void main (String [] args){
+          System.out.println("Hello, World");
+}
+}
+
+nano run-java.yml
+inside paste this:
+---
+- name: Compile and run HelloWorld.java in current directory
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: Ensure Java is installed
+      apt:
+        name: default-jdk
+        state: present
+      become: yes
+    - name: Compile HelloWorld.java
+      command: javac HelloWorld.java
+      args:
+        chdir: "{{ ansible_env.PWD }}"
+    - name: Run HelloWorld
+      command: java HelloWorld
+      args:
+        chdir: "{{ ansible_env.PWD }}"
+      register: output
+    - name: Display output
+      debug:
+        msg: "{{ output.stdout }}"
+
+ansible-playbook -i inventory.ini run-java.yml
+
+
+
+
 
