@@ -16,3 +16,12 @@
     </dependency>
   </dependencies>
 </project>
+
+cmd:"C:\Program Files\Java\jdk-21\bin\java.exe" -jar jenkins.war --httpPort=9090
+ter:& "C:\Program Files\Java\jdk-21\bin\java.exe" -jar jenkins.war --httpPort=9090
+
+
+cd C:\Users\91891\.jenkins\workspace\Maven_Build_1
+mvn clean install
+java -jar target\maven-example-1.0-SNAPSHOT.jar
+
